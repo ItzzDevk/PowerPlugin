@@ -1,0 +1,4 @@
+name: PowerPlugin
+version: '${project.version}'
+main: me.itzzdevk.powerplugin.PowerPlugin
+api-version: 1.20
