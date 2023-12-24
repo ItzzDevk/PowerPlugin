@@ -1,7 +1,13 @@
 package me.itzzdevk.powerplugin;
 
+import me.itzzdevk.powerplugin.commands.RerollCommand;
+import me.itzzdevk.powerplugin.listeners.DeathListener;
+import me.itzzdevk.powerplugin.listeners.JoinListener;
+import me.itzzdevk.powerplugin.listeners.RespawnListener;
+import me.itzzdevk.powerplugin.preventers.NoClicking;
 import me.itzzdevk.powerplugin.preventers.NoDropping;
-import me.itzzdevk.powerplugin.listeners.Reroll;
+import me.itzzdevk.powerplugin.listeners.InteractListener;
+import me.itzzdevk.powerplugin.systems.LevelsSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +19,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import sun.jvm.hotspot.debugger.linux.amd64.DwarfParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,20 +34,46 @@ public final class PowerPlugin extends JavaPlugin {
     public ItemStack strengthpower = new ItemStack(Material.NETHER_STAR, 1);
     public ItemStack lightningpower = new ItemStack(Material.NETHER_STAR, 1);
 
+    public static Map<UUID, Integer> levelMap;
+    public static Map<UUID, Integer> powerMap;
     public static PowerPlugin plugin;
 
     @Override
     public void onEnable() {
         plugin = this;
 
-        this.getServer().getPluginManager().registerEvents(new NoDropping(), this);
-        this.getServer().getPluginManager().registerEvents(new Reroll(), this);
+        registerCommands();
+        registerEvents();
+        ItemLore();
 
+
+        levelMap = new HashMap<>();
         powerMap = new HashMap<>();
-        loadPowerData();
 
+        LevelsSystem.loadLevelData();
+    }
 
+    @Override
+    public void onDisable() {
+        LevelsSystem.saveLevelData();
+    }
 
+    public void registerEvents() {
+        this.getServer().getPluginManager().registerEvents(new NoDropping(), this);
+        this.getServer().getPluginManager().registerEvents(new NoClicking(), this);
+        this.getServer().getPluginManager().registerEvents(new LevelsSystem(), this);
+
+        this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        this.getServer().getPluginManager().registerEvents(new InteractListener(), this);
+        this.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
+        this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
+    }
+
+    public void registerCommands() {
+        getCommand("reroll").setExecutor(new RerollCommand());
+    }
+
+    public void ItemLore() {
         ItemMeta firemeta = firepower.getItemMeta();
         firemeta.setDisplayName(ChatColor.RED + "§lFire Power");
         firepower.setItemMeta(firemeta);
@@ -60,71 +93,5 @@ public final class PowerPlugin extends JavaPlugin {
         ItemMeta lightningmeta = lightningpower.getItemMeta();
         lightningmeta.setDisplayName(ChatColor.DARK_GRAY + "§lLightning Power");
         lightningpower.setItemMeta(lightningmeta);
-
-    }
-
-    @Override
-    public void onDisable() {
-        savePowerData();
-    }
-
-    public static Map<UUID, Integer> powerMap;
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        // Delayed task to handle data saving onto the disk
-        Bukkit.getScheduler().runTaskLater(this, () -> savePowerData(), 20L);
-    }
-
-    private void loadPowerData() {
-
-        for (String playerId : getConfig().getKeys(false)) {
-            UUID uuid = UUID.fromString(playerId);
-            int lives = getConfig().getInt(playerId);
-            powerMap.put(uuid, lives);
-        }
-    }
-
-    private void savePowerData() {
-
-        for (Map.Entry<UUID, Integer> entry : powerMap.entrySet()) {
-            UUID uuid = entry.getKey();
-            int lives = entry.getValue();
-            getConfig().set(uuid.toString(), lives);
-        }
-
-        saveConfig();
-    }
-
-    @EventHandler
-    public void OnPlayerDeath(PlayerDeathEvent event) {
-        event.getDrops().remove(PowerPlugin.plugin.firepower);
-        event.getDrops().remove(PowerPlugin.plugin.healingpower);
-        event.getDrops().remove(PowerPlugin.plugin.windpower);
-        event.getDrops().remove(PowerPlugin.plugin.strengthpower);
-        event.getDrops().remove(PowerPlugin.plugin.lightningpower);
-    }
-
-    @EventHandler
-    public void onPlayerDeath(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-
-        if (powerMap.get(uuid).equals(1)) {
-            player.getInventory().addItem(PowerPlugin.plugin.firepower);
-
-        } else if (powerMap.get(uuid).equals(2)) {
-            player.getInventory().addItem(PowerPlugin.plugin.healingpower);
-
-        } else if (powerMap.get(uuid).equals(3)) {
-            player.getInventory().addItem(PowerPlugin.plugin.windpower);
-
-        } else if (powerMap.get(uuid).equals(4)) {
-            player.getInventory().addItem(PowerPlugin.plugin.strengthpower);
-
-        } else if (powerMap.get(uuid).equals(5)) {
-            player.getInventory().addItem(PowerPlugin.plugin.lightningpower);
-
-        }
     }
 }
