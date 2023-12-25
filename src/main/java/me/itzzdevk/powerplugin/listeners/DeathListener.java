@@ -18,9 +18,11 @@ public class DeathListener implements Listener {
     public void OnPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
-        int livesk = PowerPlugin.levelMap.get(killer.getUniqueId()) - 0;
-        int livesp = PowerPlugin.levelMap.get(player.getUniqueId()) - 0;
+        int livesk = PowerPlugin.levelMap.get(killer.getUniqueId());
+        int livesp = PowerPlugin.levelMap.get(player.getUniqueId());
         UUID uuid = player.getUniqueId();
+
+        System.out.println("1 works");
 
 
         if (event.getDrops().contains(PowerPlugin.plugin.firepower)) {

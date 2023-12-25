@@ -18,7 +18,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        int livesp = PowerPlugin.levelMap.get(player.getUniqueId()) - 0;
+        int livesp = PowerPlugin.levelMap.get(player.getUniqueId());
         UUID uuid = player.getUniqueId();
 
 
@@ -66,6 +66,7 @@ public class InteractListener implements Listener {
                         if (PowerPlugin.levelMap.containsKey(player.getUniqueId())) {
 
                             if (livesp <= 2) {
+                                event.getPlayer().getInventory().getItemInMainHand().setAmount(-1);
                                 int lives = PowerPlugin.levelMap.get(uuid) + 1;
                                 PowerPlugin.levelMap.put(uuid, lives);
                                 player.sendMessage(ChatColor.GREEN + "Used a Level Shard! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
