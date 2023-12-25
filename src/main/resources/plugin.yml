@@ -5,5 +5,14 @@ api-version: '1.20'
 
 commands:
   reroll:
-    description: rerolls the Players Power
+    description: Reroll your Power!
     usage: /reroll
+  power:
+    description: Check your Power!
+    usage: /power
+  levels:
+    description: Check your Power Level!
+    usage: /levels
+  level:
+    description: Set the Specificied Players Level!
+    usage: /level set <player> <amount>

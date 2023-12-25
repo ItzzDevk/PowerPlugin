@@ -1,6 +1,9 @@
 package me.itzzdevk.powerplugin;
 
+import me.itzzdevk.powerplugin.commands.LevelsCommand;
+import me.itzzdevk.powerplugin.commands.PowerCommand;
 import me.itzzdevk.powerplugin.commands.RerollCommand;
+import me.itzzdevk.powerplugin.commands.SetLevelsCommand;
 import me.itzzdevk.powerplugin.listeners.DeathListener;
 import me.itzzdevk.powerplugin.listeners.JoinListener;
 import me.itzzdevk.powerplugin.listeners.RespawnListener;
@@ -17,6 +20,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import sun.jvm.hotspot.debugger.linux.amd64.DwarfParser;
@@ -34,6 +39,9 @@ public final class PowerPlugin extends JavaPlugin {
     public ItemStack strengthpower = new ItemStack(Material.NETHER_STAR, 1);
     public ItemStack lightningpower = new ItemStack(Material.NETHER_STAR, 1);
 
+    public ItemStack powerreroll = new ItemStack(Material.BEACON, 1);
+    public ItemStack levelshard = new ItemStack(Material.PAPER, 1);
+
     public static Map<UUID, Integer> levelMap;
     public static Map<UUID, Integer> powerMap;
     public static PowerPlugin plugin;
@@ -45,6 +53,7 @@ public final class PowerPlugin extends JavaPlugin {
         registerCommands();
         registerEvents();
         ItemLore();
+        ItemRecipe();
 
 
         levelMap = new HashMap<>();
@@ -71,6 +80,9 @@ public final class PowerPlugin extends JavaPlugin {
 
     public void registerCommands() {
         getCommand("reroll").setExecutor(new RerollCommand());
+        getCommand("power").setExecutor(new PowerCommand());
+        getCommand("levels").setExecutor(new LevelsCommand());
+        getCommand("level").setExecutor(new SetLevelsCommand());
     }
 
     public void ItemLore() {
@@ -93,5 +105,31 @@ public final class PowerPlugin extends JavaPlugin {
         ItemMeta lightningmeta = lightningpower.getItemMeta();
         lightningmeta.setDisplayName(ChatColor.DARK_GRAY + "§lLightning Power");
         lightningpower.setItemMeta(lightningmeta);
+
+
+
+        ItemMeta rerollmeta = powerreroll.getItemMeta();
+        rerollmeta.setDisplayName(ChatColor.BLUE + "§lPower Reroll");
+        powerreroll.setItemMeta(rerollmeta);
+
+        ItemMeta shardmeta = levelshard.getItemMeta();
+        shardmeta.setDisplayName(ChatColor.AQUA + "§lLevel Shard");
+        levelshard.setItemMeta(shardmeta);
+    }
+
+    public void ItemRecipe() {
+        ShapedRecipe rerollrecipe = new ShapedRecipe(powerreroll);
+        rerollrecipe.shape("EFE", "FDF", "EFE");
+        rerollrecipe.setIngredient('E', Material.DIAMOND_BLOCK);
+        rerollrecipe.setIngredient('D', Material.SCULK_CATALYST);
+        rerollrecipe.setIngredient('F', Material.DRAGON_BREATH);
+        getServer().addRecipe(rerollrecipe);
+
+        ShapedRecipe shardrecipe = new ShapedRecipe(levelshard);
+        shardrecipe.shape("EFE", "FDF", "EFE");
+        shardrecipe.setIngredient('E', Material.NETHERITE_INGOT);
+        shardrecipe.setIngredient('D', Material.NETHER_STAR);
+        shardrecipe.setIngredient('F', Material.DIAMOND_BLOCK);
+        getServer().addRecipe(shardrecipe);
     }
 }

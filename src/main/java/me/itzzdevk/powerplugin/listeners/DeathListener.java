@@ -24,47 +24,43 @@ public class DeathListener implements Listener {
 
 
         if (event.getDrops().contains(PowerPlugin.plugin.firepower)) {
-            PowerPlugin.plugin.powerMap.put(event.getEntity().getUniqueId(), 1);
+            PowerPlugin.powerMap.put(event.getEntity().getUniqueId(), 1);
             event.getDrops().remove(PowerPlugin.plugin.firepower);
 
         } else if (event.getDrops().contains(PowerPlugin.plugin.healingpower)) {
-            PowerPlugin.plugin.powerMap.put(event.getEntity().getUniqueId(), 2);
+            PowerPlugin.powerMap.put(event.getEntity().getUniqueId(), 2);
             event.getDrops().remove(PowerPlugin.plugin.healingpower);
 
         } else if (event.getDrops().contains(PowerPlugin.plugin.windpower)) {
-            PowerPlugin.plugin.powerMap.put(event.getEntity().getUniqueId(), 3);
+            PowerPlugin.powerMap.put(event.getEntity().getUniqueId(), 3);
             event.getDrops().remove(PowerPlugin.plugin.windpower);
 
         } else if (event.getDrops().contains(PowerPlugin.plugin.strengthpower)) {
-            PowerPlugin.plugin.powerMap.put(event.getEntity().getUniqueId(), 4);
+            PowerPlugin.powerMap.put(event.getEntity().getUniqueId(), 4);
             event.getDrops().remove(PowerPlugin.plugin.strengthpower);
 
-        } else if (event.getDrops().contains(PowerPlugin.plugin.lightningpower)) {
-            PowerPlugin.plugin.powerMap.put(event.getEntity().getUniqueId(), 5);
-            event.getDrops().remove(PowerPlugin.plugin.lightningpower);
+        } else {
+            if (event.getDrops().contains(PowerPlugin.plugin.lightningpower)) {
+                PowerPlugin.powerMap.put(event.getEntity().getUniqueId(), 5);
+                event.getDrops().remove(PowerPlugin.plugin.lightningpower);
 
+            }
         }
 
 
+        if (PowerPlugin.levelMap.containsKey(player.getUniqueId())) {
 
-        if (PowerPlugin.plugin.levelMap.containsKey(player.getUniqueId())
-                && PowerPlugin.plugin.levelMap.containsKey(killer.getUniqueId())) {
-            if (killer instanceof Player) {
-                if (!killer.getDisplayName().equals(player.getDisplayName())) {
-
-                    if (livesk <= 2) {
-                        int lives = PowerPlugin.levelMap.get(player.getUniqueId()) - 1;
-                        PowerPlugin.levelMap.put(player.getUniqueId(), lives);
-                        killer.sendMessage(ChatColor.GREEN + "Gained an Energy! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
-                    }
+            if (livesp <= 3) {
+                int lives = PowerPlugin.levelMap.get(player.getUniqueId()) - 1;
+                PowerPlugin.levelMap.put(player.getUniqueId(), lives);
+                player.sendMessage(ChatColor.RED + "Lost a Level! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
+            }
 
 
-                    if (livesp <= 3) {
-                        int lives = PowerPlugin.levelMap.get(player.getUniqueId()) + 1;
-                        PowerPlugin.levelMap.put(killer.getUniqueId(), lives);
-                        player.sendMessage(ChatColor.RED + "Lost an Energy! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
-                    }
-                }
+            if (livesk <= 2) {
+                int lives = PowerPlugin.levelMap.get(killer.getUniqueId()) + 1;
+                PowerPlugin.levelMap.put(killer.getUniqueId(), lives);
+                killer.sendMessage(ChatColor.GREEN + "Gained a Level! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
             }
         }
     }

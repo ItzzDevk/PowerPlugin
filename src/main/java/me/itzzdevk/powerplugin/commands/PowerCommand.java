@@ -17,19 +17,19 @@ public class PowerCommand implements CommandExecutor {
                 Player player = (Player) sender;
 
                 if (player.getInventory().contains(PowerPlugin.plugin.firepower)) {
-                    player.sendMessage(ChatColor.GREEN + "You have the Fire Power!");
+                    player.sendMessage(ChatColor.GREEN + "You have the " + ChatColor.RED + "Fire Power!");
 
                 } else if (player.getInventory().contains(PowerPlugin.plugin.healingpower)) {
-                    player.sendMessage(ChatColor.GREEN + "You have the Healing Power!");
+                    player.sendMessage(ChatColor.GREEN + "You have the " + ChatColor.LIGHT_PURPLE + "Healing Power!");
 
                 } else if (player.getInventory().contains(PowerPlugin.plugin.windpower)) {
-                    player.sendMessage(ChatColor.GREEN + "You have the Wind Power!");
+                    player.sendMessage(ChatColor.GREEN + "You have the " + ChatColor.GRAY + "Wind Power!");
 
                 } else if (player.getInventory().contains(PowerPlugin.plugin.strengthpower)) {
-                    player.sendMessage(ChatColor.GREEN + "You have the Strength Power!");
+                    player.sendMessage(ChatColor.GREEN + "You have the " + ChatColor.DARK_RED + "Strength Power!");
 
                 } else if (player.getInventory().contains(PowerPlugin.plugin.lightningpower)) {
-                    player.sendMessage(ChatColor.GREEN + "You have the Lightning Power!");
+                    player.sendMessage(ChatColor.GREEN + "You have the " + ChatColor.DARK_GRAY + "Lightning Power!");
 
                 } else {
                     player.sendMessage(ChatColor.RED + "Something is wrong, You don't have a Power.");

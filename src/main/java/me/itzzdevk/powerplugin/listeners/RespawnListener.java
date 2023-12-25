@@ -17,28 +17,31 @@ public class RespawnListener implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        int power = PowerPlugin.powerMap.get(player.getUniqueId());
 
 
-        if (PowerPlugin.plugin.powerMap.get(uuid).equals(1)) {
+        if (power == 1) {
             player.getInventory().addItem(PowerPlugin.plugin.firepower);
-            PowerPlugin.plugin.powerMap.remove(uuid);
+            PowerPlugin.powerMap.remove(uuid);
 
-        } else if (PowerPlugin.plugin.powerMap.get(uuid).equals(2)) {
+        } else if (power == 2) {
             player.getInventory().addItem(PowerPlugin.plugin.healingpower);
-            PowerPlugin.plugin.powerMap.remove(uuid);
+            PowerPlugin.powerMap.remove(uuid);
 
-        } else if (PowerPlugin.plugin.powerMap.get(uuid).equals(3)) {
+        } else if (power == 3) {
             player.getInventory().addItem(PowerPlugin.plugin.windpower);
-            PowerPlugin.plugin.powerMap.remove(uuid);
+            PowerPlugin.powerMap.remove(uuid);
 
-        } else if (PowerPlugin.plugin.powerMap.get(uuid).equals(4)) {
+        } else if (power == 4) {
             player.getInventory().addItem(PowerPlugin.plugin.strengthpower);
-            PowerPlugin.plugin.powerMap.remove(uuid);
+            PowerPlugin.powerMap.remove(uuid);
 
-        } else if (PowerPlugin.plugin.powerMap.get(uuid).equals(5)) {
+        } else if (power == 5) {
             player.getInventory().addItem(PowerPlugin.plugin.lightningpower);
-            PowerPlugin.plugin.powerMap.remove(uuid);
+            PowerPlugin.powerMap.remove(uuid);
 
+        } else {
+            player.sendMessage(ChatColor.RED + "Something is wrong, you don't have a Power.");
         }
 
 
