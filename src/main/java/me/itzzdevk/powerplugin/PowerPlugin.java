@@ -7,6 +7,7 @@ import me.itzzdevk.powerplugin.commands.SetLevelsCommand;
 import me.itzzdevk.powerplugin.listeners.DeathListener;
 import me.itzzdevk.powerplugin.listeners.JoinListener;
 import me.itzzdevk.powerplugin.listeners.RespawnListener;
+import me.itzzdevk.powerplugin.powers.FirstAbility;
 import me.itzzdevk.powerplugin.preventers.NoClicking;
 import me.itzzdevk.powerplugin.preventers.NoDropping;
 import me.itzzdevk.powerplugin.listeners.InteractListener;
@@ -76,6 +77,8 @@ public final class PowerPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new InteractListener(), this);
         this.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
         this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
+
+        this.getServer().getPluginManager().registerEvents(new FirstAbility(), this);
     }
 
     public void registerCommands() {
