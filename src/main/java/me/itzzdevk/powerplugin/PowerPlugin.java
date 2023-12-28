@@ -8,6 +8,8 @@ import me.itzzdevk.powerplugin.listeners.DeathListener;
 import me.itzzdevk.powerplugin.listeners.JoinListener;
 import me.itzzdevk.powerplugin.listeners.RespawnListener;
 import me.itzzdevk.powerplugin.powers.FirstAbility;
+import me.itzzdevk.powerplugin.powers.SecondAbility;
+import me.itzzdevk.powerplugin.powers.ThirdAbility;
 import me.itzzdevk.powerplugin.preventers.NoClicking;
 import me.itzzdevk.powerplugin.preventers.NoDropping;
 import me.itzzdevk.powerplugin.listeners.InteractListener;
@@ -79,6 +81,8 @@ public final class PowerPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
 
         this.getServer().getPluginManager().registerEvents(new FirstAbility(), this);
+        this.getServer().getPluginManager().registerEvents(new SecondAbility(), this);
+        this.getServer().getPluginManager().registerEvents(new ThirdAbility(), this);
     }
 
     public void registerCommands() {
