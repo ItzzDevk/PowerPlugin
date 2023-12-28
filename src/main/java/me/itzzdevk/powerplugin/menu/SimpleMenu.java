@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +21,7 @@ public class SimpleMenu implements Menu {
     private final MenuManager menuManager;
     private final Inventory inventory;
 
-    public SimpleMenu(JavaPlugin plugin, MenuManager menuManager, InventoryHolder holder, int size, String title) {
+    public SimpleMenu(MenuManager menuManager, InventoryHolder holder, int size, String title) {
         this.inventory = Bukkit.createInventory(holder, size, title);
         this.menuManager = menuManager;
     }

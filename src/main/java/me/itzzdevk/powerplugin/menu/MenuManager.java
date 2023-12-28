@@ -34,20 +34,21 @@ public class MenuManager {
 
         @EventHandler(ignoreCancelled = true)
         public void onClick(InventoryClickEvent event) {
-            Inventory clickedInventory = event.getClickedInventory();
-            Menu menu = menus.get(clickedInventory);
+            Inventory topInventory = event.getInventory();
+            Menu menu = menus.get(topInventory);
             if (menu == null) return;
 
+            event.setCancelled(true);
+
+            Inventory clickedInventory = event.getClickedInventory();
+            if (topInventory != clickedInventory) return;
+
             ClickType clickType = event.getClick();
-            if (!clickType.isLeftClick() && !clickType.isRightClick()) {
-                event.setCancelled(true);
-                return;
-            }
+            if (!clickType.isLeftClick() && !clickType.isRightClick()) return;
 
             Player player = (Player) event.getWhoClicked();
             int slot = event.getSlot();
             menu.click(player, slot);
-            event.setCancelled(true);
         }
 
         @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
