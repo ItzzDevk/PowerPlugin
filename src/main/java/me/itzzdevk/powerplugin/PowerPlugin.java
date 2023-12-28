@@ -4,29 +4,20 @@ import me.itzzdevk.powerplugin.commands.LevelsCommand;
 import me.itzzdevk.powerplugin.commands.PowerCommand;
 import me.itzzdevk.powerplugin.commands.RerollCommand;
 import me.itzzdevk.powerplugin.commands.SetLevelsCommand;
-import me.itzzdevk.powerplugin.listeners.DeathListener;
-import me.itzzdevk.powerplugin.listeners.JoinListener;
-import me.itzzdevk.powerplugin.listeners.RespawnListener;
+import me.itzzdevk.powerplugin.listeners.*;
 import me.itzzdevk.powerplugin.menu.MenuManager;
 import me.itzzdevk.powerplugin.powers.FirstAbility;
 import me.itzzdevk.powerplugin.powers.SecondAbility;
 import me.itzzdevk.powerplugin.powers.ThirdAbility;
 import me.itzzdevk.powerplugin.preventers.NoClicking;
 import me.itzzdevk.powerplugin.preventers.NoDropping;
-import me.itzzdevk.powerplugin.listeners.InteractListener;
 import me.itzzdevk.powerplugin.systems.LevelsSystem;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -55,6 +46,8 @@ public final class PowerPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        menuManager = new MenuManager(plugin);
+
         registerCommands();
         registerEvents();
         ItemLore();
@@ -65,8 +58,6 @@ public final class PowerPlugin extends JavaPlugin {
         powerMap = new HashMap<>();
 
         LevelsSystem.loadLevelData();
-
-        menuManager = new MenuManager(plugin);
     }
 
     @Override
@@ -75,18 +66,21 @@ public final class PowerPlugin extends JavaPlugin {
     }
 
     public void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new NoDropping(), this);
-        this.getServer().getPluginManager().registerEvents(new NoClicking(), this);
-        this.getServer().getPluginManager().registerEvents(new LevelsSystem(), this);
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new NoDropping(), this);
+        pm.registerEvents(new NoClicking(), this);
+        pm.registerEvents(new LevelsSystem(), this);
 
-        this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        this.getServer().getPluginManager().registerEvents(new InteractListener(), this);
-        this.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
-        this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        pm.registerEvents(new JoinListener(), this);
+        pm.registerEvents(new InteractListener(), this);
+        pm.registerEvents(new RespawnListener(), this);
+        pm.registerEvents(new DeathListener(), this);
 
-        this.getServer().getPluginManager().registerEvents(new FirstAbility(), this);
-        this.getServer().getPluginManager().registerEvents(new SecondAbility(), this);
-        this.getServer().getPluginManager().registerEvents(new ThirdAbility(), this);
+        pm.registerEvents(new FirstAbility(), this);
+        pm.registerEvents(new SecondAbility(), this);
+        pm.registerEvents(new ThirdAbility(), this);
+
+        pm.registerEvents(new ReviveCompassListener(plugin, menuManager), plugin);
     }
 
     public void registerCommands() {
