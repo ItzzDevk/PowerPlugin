@@ -7,6 +7,7 @@ import me.itzzdevk.powerplugin.commands.SetLevelsCommand;
 import me.itzzdevk.powerplugin.listeners.DeathListener;
 import me.itzzdevk.powerplugin.listeners.JoinListener;
 import me.itzzdevk.powerplugin.listeners.RespawnListener;
+import me.itzzdevk.powerplugin.menu.MenuManager;
 import me.itzzdevk.powerplugin.powers.FirstAbility;
 import me.itzzdevk.powerplugin.powers.SecondAbility;
 import me.itzzdevk.powerplugin.powers.ThirdAbility;
@@ -48,6 +49,8 @@ public final class PowerPlugin extends JavaPlugin {
     public static Map<UUID, Integer> powerMap;
     public static PowerPlugin plugin;
 
+    public static MenuManager menuManager;
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -62,6 +65,8 @@ public final class PowerPlugin extends JavaPlugin {
         powerMap = new HashMap<>();
 
         LevelsSystem.loadLevelData();
+
+        menuManager = new MenuManager(plugin);
     }
 
     @Override
