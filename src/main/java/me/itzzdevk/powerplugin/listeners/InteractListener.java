@@ -29,7 +29,7 @@ public class InteractListener implements Listener {
                     World world = player.getWorld();
 
                     ItemStack rewardItem = RollPower.getRewardItem(player, roll);
-                    event.getPlayer().getInventory().getItemInMainHand().setAmount(-1);
+                    event.getItem().setAmount(event.getItem().getAmount() - 1);
                     event.setCancelled(true);
 
                     event.getPlayer().getInventory().remove(PowerPlugin.plugin.firepower);
@@ -66,7 +66,7 @@ public class InteractListener implements Listener {
                         if (PowerPlugin.levelMap.containsKey(player.getUniqueId())) {
 
                             if (livesp <= 2) {
-                                event.getPlayer().getInventory().getItemInMainHand().setAmount(-1);
+                                event.getItem().setAmount(event.getItem().getAmount() - 1);
                                 int lives = PowerPlugin.levelMap.get(uuid) + 1;
                                 PowerPlugin.levelMap.put(uuid, lives);
                                 player.sendMessage(ChatColor.GREEN + "Used a Level Shard! You are now at Level " + ChatColor.YELLOW + lives + ChatColor.RED + ".");
@@ -75,8 +75,6 @@ public class InteractListener implements Listener {
                         }
                     }
                 }
-
-
             }
         }
     }

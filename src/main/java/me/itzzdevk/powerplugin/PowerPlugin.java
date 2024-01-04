@@ -15,6 +15,7 @@ import me.itzzdevk.powerplugin.systems.LevelsSystem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
@@ -35,6 +36,7 @@ public final class PowerPlugin extends JavaPlugin {
 
     public ItemStack powerreroll = new ItemStack(Material.BEACON, 1);
     public ItemStack levelshard = new ItemStack(Material.PAPER, 1);
+    public ItemStack revivecompass = new ItemStack(Material.COMPASS, 1);
 
     public static Map<UUID, Integer> levelMap;
     public static Map<UUID, Integer> powerMap;
@@ -120,6 +122,10 @@ public final class PowerPlugin extends JavaPlugin {
         ItemMeta shardmeta = levelshard.getItemMeta();
         shardmeta.setDisplayName(ChatColor.AQUA + "§lLevel Shard");
         levelshard.setItemMeta(shardmeta);
+
+        ItemMeta compassmeta = revivecompass.getItemMeta();
+        compassmeta.setDisplayName(ChatColor.AQUA + "Revive Compass");
+        revivecompass.setItemMeta(compassmeta);
     }
 
     public void ItemRecipe() {
@@ -136,5 +142,12 @@ public final class PowerPlugin extends JavaPlugin {
         shardrecipe.setIngredient('D', Material.NETHER_STAR);
         shardrecipe.setIngredient('F', Material.DIAMOND_BLOCK);
         getServer().addRecipe(shardrecipe);
+
+        ShapedRecipe compassrecipe = new ShapedRecipe(revivecompass);
+        compassrecipe.shape("EFE", "FDF", "EFE");
+        compassrecipe.setIngredient('E',  new RecipeChoice.ExactChoice(levelshard));
+        compassrecipe.setIngredient('D', Material.NETHER_STAR);
+        compassrecipe.setIngredient('F', Material.DIAMOND_BLOCK);
+        getServer().addRecipe(compassrecipe);
     }
 }

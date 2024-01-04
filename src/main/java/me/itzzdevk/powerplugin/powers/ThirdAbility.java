@@ -35,57 +35,48 @@ public class ThirdAbility implements Listener {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
+        int lives = PowerPlugin.levelMap.get(player.getUniqueId());
 
-        if (itemStack.getItemMeta() != null) {
-            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                if (player.isSneaking()) {
-                    if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.RED + "§lFire Power")) {
-                        if (!campCooldown.containsKey(playerUUID)) {
-                            ParticleHelper.activateFireUlt(player);
-                            event.setCancelled(true);
-                            campCooldown.put(playerUUID, System.currentTimeMillis() + (26 * 1000));
-                        } else {
-                            long cooldown = campCooldown.get(playerUUID);
-                            if (System.currentTimeMillis() >= cooldown) {
+        if (lives >= 2) {
+            if (itemStack.getItemMeta() != null) {
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    if (player.isSneaking()) {
+                        if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.RED + "§lFire Power")) {
+                            if (!campCooldown.containsKey(playerUUID)) {
                                 ParticleHelper.activateFireUlt(player);
                                 event.setCancelled(true);
                                 campCooldown.put(playerUUID, System.currentTimeMillis() + (26 * 1000));
                             } else {
-                                player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                long cooldown = campCooldown.get(playerUUID);
+                                if (System.currentTimeMillis() >= cooldown) {
+                                    ParticleHelper.activateFireUlt(player);
+                                    event.setCancelled(true);
+                                    campCooldown.put(playerUUID, System.currentTimeMillis() + (26 * 1000));
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                }
                             }
-                        }
 
 
-                    } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "§lHealing Power")) {
-                        if (!regenCooldown.containsKey(playerUUID)) {
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
-                            event.setCancelled(true);
-                            regenCooldown.put(playerUUID, System.currentTimeMillis() + (21 * 1000));
-                        } else {
-                            long cooldown = regenCooldown.get(playerUUID);
-                            if (System.currentTimeMillis() >= cooldown) {
+                        } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "§lHealing Power")) {
+                            if (!regenCooldown.containsKey(playerUUID)) {
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
                                 event.setCancelled(true);
                                 regenCooldown.put(playerUUID, System.currentTimeMillis() + (21 * 1000));
                             } else {
-                                player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                long cooldown = regenCooldown.get(playerUUID);
+                                if (System.currentTimeMillis() >= cooldown) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
+                                    event.setCancelled(true);
+                                    regenCooldown.put(playerUUID, System.currentTimeMillis() + (21 * 1000));
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                }
                             }
-                        }
 
 
-                    } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "§lWind Power")) {
-                        if (!dashCooldown.containsKey(playerUUID)) {
-                            org.bukkit.util.Vector direction = player.getLocation().getDirection().normalize().multiply(1.7);
-                            player.setVelocity(direction);
-                            double particleSpacing = 0.1D;
-                            int particleCount = 45;
-                            double damageAmount = 8.0D;
-                            ParticleHelper.spawnLine(event.getPlayer(), particleSpacing, particleCount, damageAmount, 120);
-                            event.setCancelled(true);
-                            dashCooldown.put(playerUUID, System.currentTimeMillis() + (7 * 1000));
-                        } else {
-                            long cooldown = dashCooldown.get(playerUUID);
-                            if (System.currentTimeMillis() >= cooldown) {
+                        } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "§lWind Power")) {
+                            if (!dashCooldown.containsKey(playerUUID)) {
                                 org.bukkit.util.Vector direction = player.getLocation().getDirection().normalize().multiply(1.7);
                                 player.setVelocity(direction);
                                 double particleSpacing = 0.1D;
@@ -95,45 +86,57 @@ public class ThirdAbility implements Listener {
                                 event.setCancelled(true);
                                 dashCooldown.put(playerUUID, System.currentTimeMillis() + (7 * 1000));
                             } else {
-                                player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                long cooldown = dashCooldown.get(playerUUID);
+                                if (System.currentTimeMillis() >= cooldown) {
+                                    org.bukkit.util.Vector direction = player.getLocation().getDirection().normalize().multiply(1.7);
+                                    player.setVelocity(direction);
+                                    double particleSpacing = 0.1D;
+                                    int particleCount = 45;
+                                    double damageAmount = 8.0D;
+                                    ParticleHelper.spawnLine(event.getPlayer(), particleSpacing, particleCount, damageAmount, 120);
+                                    event.setCancelled(true);
+                                    dashCooldown.put(playerUUID, System.currentTimeMillis() + (7 * 1000));
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                }
                             }
-                        }
 
 
-                    } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.DARK_RED + "§lStrength Power")) {
-                        if (!strengthCooldown.containsKey(playerUUID)) {
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 7));
-                            event.setCancelled(true);
-                            strengthCooldown.put(playerUUID, System.currentTimeMillis() + (20 * 1000));
-                        } else {
-                            long cooldown = strengthCooldown.get(playerUUID);
-                            if (System.currentTimeMillis() >= cooldown) {
+                        } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.DARK_RED + "§lStrength Power")) {
+                            if (!strengthCooldown.containsKey(playerUUID)) {
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 7));
                                 event.setCancelled(true);
                                 strengthCooldown.put(playerUUID, System.currentTimeMillis() + (20 * 1000));
                             } else {
-                                player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                long cooldown = strengthCooldown.get(playerUUID);
+                                if (System.currentTimeMillis() >= cooldown) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 7));
+                                    event.setCancelled(true);
+                                    strengthCooldown.put(playerUUID, System.currentTimeMillis() + (20 * 1000));
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                }
                             }
-                        }
 
 
-                    } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "§lLightning Power")) {
-                        if (!lightningultCooldown.containsKey(playerUUID)) {
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 25 * 20, 1));
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 25 * 20, 1));
-                            ParticleHelper.activateLightningUlt(player);
-                            event.setCancelled(true);
-                            lightningultCooldown.put(playerUUID, System.currentTimeMillis() + (35 * 1000));
-                        } else {
-                            long cooldown = lightningultCooldown.get(playerUUID);
-                            if (System.currentTimeMillis() >= cooldown) {
+                        } else if (itemStack.getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "§lLightning Power")) {
+                            if (!lightningultCooldown.containsKey(playerUUID)) {
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 25 * 20, 1));
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 25 * 20, 1));
                                 ParticleHelper.activateLightningUlt(player);
                                 event.setCancelled(true);
-                                lightningultCooldown.put(playerUUID, System.currentTimeMillis() + (8 * 1000));
+                                lightningultCooldown.put(playerUUID, System.currentTimeMillis() + (35 * 1000));
                             } else {
-                                player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                long cooldown = lightningultCooldown.get(playerUUID);
+                                if (System.currentTimeMillis() >= cooldown) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 25 * 20, 1));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 25 * 20, 1));
+                                    ParticleHelper.activateLightningUlt(player);
+                                    event.setCancelled(true);
+                                    lightningultCooldown.put(playerUUID, System.currentTimeMillis() + (8 * 1000));
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Cooldown: " + ChatColor.GREEN + (cooldown - System.currentTimeMillis()) / 1000 + " seconds " + ChatColor.RED + "left.");
+                                }
                             }
                         }
                     }
